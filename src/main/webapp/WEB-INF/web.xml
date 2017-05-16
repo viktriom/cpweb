@@ -18,5 +18,11 @@
         <servlet-name>cp</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+    
+    <servlet-mapping>
+    	<servlet-name>default</servlet-name>
+    	<url-pattern>/res/*</url-pattern>
+	</servlet-mapping>
+    
   
 </web-app>

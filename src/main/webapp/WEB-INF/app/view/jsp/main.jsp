@@ -18,10 +18,12 @@
 			</select>
 			<button type="button" name="refreshCmdList" id="refreshCmdList" onClick="refreshCmdList()">Refresh</button>
 		</div>
-		<div>
-			<input type="file" name="theFile" size="60"></input>
+		<div id='hiddenData'>
+			<input type='hidden' id = 'paramNames' name='paramNames' value=''/>	
 		</div>
 		<div id="cmdDetails">
+		</div>
+		<div id="console">
 		</div>
 	</div>
 </body>

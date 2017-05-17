@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bds.cp.core.util.CPUtil;
 import com.bds.cp.core.util.web.WebUtil;
+import com.bds.cp.web.util.CPWebUtil;
 import com.google.gson.Gson;
 
 /**
@@ -19,7 +21,7 @@ import com.google.gson.Gson;
 @RequestMapping("/")
 public class CPController{
 	
-	private static Logger log = Logger.getLogger(WebUtil.class);
+	private static Logger log = Logger.getLogger(CPController.class);
 	
     @RequestMapping(value={"/index"}, method = RequestMethod.GET)
     public String indexClass(ModelMap modelMap){
@@ -30,8 +32,10 @@ public class CPController{
     
 @RequestMapping(value = {"/commandList"}, method = RequestMethod.GET)
     public @ResponseBody String getCommands(ModelMap modelMap){
+		log.info("Request for command list received.");
     	Gson gson = new Gson();
     	String jsonString = gson.toJson(WebUtil.getCommandList());
+    	log.info("The command list send is : " + jsonString);
     	return jsonString;
     }
     
@@ -45,11 +49,12 @@ public class CPController{
     @RequestMapping(value={"/cmdDetailsHTML/{commandName:.+}"}, method=RequestMethod.GET)
     public @ResponseBody String getCommandMetadataHTML(@PathVariable(value="commandName") String commandName){
     	return WebUtil.prepareHTMLForCommandMetadata(commandName);
-    	
     }
     
-    @RequestMapping(value={"/executeCommand/{commandString}"}, method=RequestMethod.GET)
-    public void executeCommand(@PathVariable(value="commandString") String commandString){
+    @RequestMapping(value={"/executeCommand/{commandString:.+}"}, method=RequestMethod.GET)
+    public @ResponseBody String executeCommand(@PathVariable(value="commandString") String commandString){
+    	log.info("Request to exeucte command " + commandString + "received. Strting the execution process now.");
+    	return CPWebUtil.executeWebCommand(commandString);
     	
     }
 }

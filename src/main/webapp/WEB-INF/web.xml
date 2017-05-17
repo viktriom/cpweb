@@ -6,13 +6,13 @@
 
   <display-name>Command Processor Web</display-name>
   
-      <servlet>
-        <servlet-name>cp</servlet-name>
-        <servlet-class>
-            org.springframework.web.servlet.DispatcherServlet
-        </servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
+   <servlet>
+    	<servlet-name>cp</servlet-name>
+    	<servlet-class>
+        	org.springframework.web.servlet.DispatcherServlet
+    	</servlet-class>
+    	<load-on-startup>1</load-on-startup>
+	</servlet>
 
     <servlet-mapping>
         <servlet-name>cp</servlet-name>

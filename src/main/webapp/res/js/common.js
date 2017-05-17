@@ -24,19 +24,25 @@ To be called when json command data is received from the server.
 This can even handle HTML Data. And will try to substitute the html in place.
 */
 function pupulateDataFromServer(responseText){
+	var cmdData = JSON.parse(responseText);
+	var cmdParamsData = cmdData.htmlData;
+	var cmdParamNames = cmdData.paramNames;
+	var txtParamNames = document.getElementById("paramNames");
+	txtParamNames.value = cmdParamNames;
 	cmdDetails = document.getElementById("cmdDetails");
-	innerView = responseText + '<div><button type="button" name="executeCommand" id="executeCommand" onClick=executeCommand()>Execute Command</button></div>';
+	innerView = cmdParamsData + '<div><button type="button" name="executeCommand" id="executeCommand" onClick=executeCommand()>Execute Command</button></div>';
 	cmdDetails.innerHTML = innerView;
 }
 
 function executeCommand(){
-	alert("executeCommand() - Mehod Called..");
+	var cmdString = prepareCommandString();
+	url = "/cpweb/executeCommand/" + cmdString;
+	httpGetAsync(url, addLogToConsole, "GET")
 }
 
 function refreshCmdList(){
 	var url="/cpweb/commandList";
-	httpGetAsync(url, populateCommandDropDown, "GET");
-	
+	httpGetAsync(url, populateCommandDropDown, "GET")	
 }
 
 function populateCommandDropDown(responseText){
@@ -51,7 +57,24 @@ function populateCommandDropDown(responseText){
 }
 
 function prepareCommandString(){
-	
+	dropDown = document.getElementById("cmdList");
+	cmdFullName = dropDown.options[dropDown.selectedIndex].value;
+	cmdFullName = dropDown.value;
+	var txtParamNames = document.getElementById("paramNames");
+	var paramNames = JSON.parse(txtParamNames.value);
+	var cmdString = cmdFullName;
+	for(var i = 0; i < paramNames.length; i++){
+		pName = paramNames[i];
+		var txtParamValue = document.getElementById(pName);
+		cmdString = cmdString + " -" + pName + " " + txtParamValue.value;
+	}
+	return cmdString;
+}
+
+function addLogToConsole(responseText){
+	var innerView = document.getElementById("console").innerHTML;
+	innerView = innerView + "<p>$:" + responseText + "</p>";
+	document.getElementById("console").innerHTML = innerView;
 }
 
 		

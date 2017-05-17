@@ -48,7 +48,7 @@
 	
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
 		<dependency>
-			<groupId>org.springframework</groupId>
+			<groupId>org.springframework</groupId>  
 			<artifactId>spring-web</artifactId>
 			<version>4.3.4.RELEASE</version>
 		</dependency>
@@ -86,10 +86,18 @@
 		    <version>v1.0</version>
 		</dependency>
 		
-		<dependency>
+		<!--<dependency>
 		    <groupId>com.github.viktriom</groupId>
 		    <artifactId>cp</artifactId>
 		    <version>master-SNAPSHOT</version>
+		</dependency> -->
+	
+		<dependency>
+			<groupId>com.github.viktriom</groupId>
+		    <artifactId>cp</artifactId>
+		    <scope>system</scope>
+		    <version>1.0-SNAPSHOT</version>
+		    <systemPath>/Users/sonu/dev/proj/java/cp/target/cp-1.0-SNAPSHOT.jar</systemPath>
 		</dependency>
 	
 		<dependency>

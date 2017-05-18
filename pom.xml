@@ -13,6 +13,10 @@
 		    <id>jitpack.io</id>
 		    <url>https://jitpack.io</url>
 		</repository>
+		<repository>
+       		<id>my-local-repo</id>
+       		<url>file:/Users/sonu/dev/proj/java/cp/target</url>
+    	</repository>
 	</repositories>
  	
  	

@@ -15,6 +15,9 @@ function httpGetAsync(theUrl, callback, method)
     xmlHttp.send(null);
 }
 
+/**
+ * Gets the command details from the server and populates the command drop down.
+ */
 function loadCommandDetails(){
 	dropDown = document.getElementById("cmdList");
 	value = dropDown.options[dropDown.selectedIndex].value;
@@ -69,6 +72,9 @@ function executeCommand(){
 	httpGetAsync(url, addLogToConsole, "GET")
 }
 
+/*
+ * Refreshes the command list.
+ */
 function refreshCmdList(){
 	var url="/cpweb/initCPSystem";
 	httpGetAsync(url, populateCommandDropDown, "GET");
@@ -77,6 +83,10 @@ function refreshCmdList(){
 	
 }
 
+/**
+ * Method is actually responsible for 
+ * @param responseText
+ */
 function populateCommandDropDown(responseText){
 	document.getElementById("cmdList").options.length = 0;
 	var commands = JSON.parse(responseText);
@@ -88,6 +98,11 @@ function populateCommandDropDown(responseText){
 	}
 }
 
+
+/**
+ * Prepare the command string which is to be sent to the server.
+ * @returns The Command to be executed in the string format.
+ */
 function prepareCommandString(){
 	dropDown = document.getElementById("cmdList");
 	cmdFullName = dropDown.options[dropDown.selectedIndex].value;
@@ -103,6 +118,10 @@ function prepareCommandString(){
 	return cmdString;
 }
 
+/**
+ * Adds the given line to the 
+ * @param responseText
+ */
 function addLogToConsole(responseText){
 	var innerView = document.getElementById("console").innerHTML;
 	innerView = innerView + "<p>$:" + responseText + "</p>";

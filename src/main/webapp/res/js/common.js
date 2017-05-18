@@ -1,4 +1,9 @@
-
+/**
+ * Method place a asunchronus HTTP request to the server for theUrl, and calls back the clallback once success.
+ * @param theUrl - The url to which the reques is to be placed.
+ * @param callback - The method to be called back once the request is completed successfully.
+ * @param method - The method [GET/POST] used to send data to the server.
+ */
 function httpGetAsync(theUrl, callback, method)
 {
     var xmlHttp = new XMLHttpRequest();
@@ -15,12 +20,13 @@ function loadCommandDetails(){
 	value = dropDown.options[dropDown.selectedIndex].value;
 	value = dropDown.value;
 	url = "/cpweb/cmdDetailsHTML/" + value;
-	//alert("The generated URL is : " + url);
 	httpGetAsync(url, pupulateDataFromServer, "GET");
+	url = "/cpweb/cmdDetailsJSON/" + value;
+	httpGetAsync(url, prepareCommandDetailFromJson, "GET");
 }
 
 /**
-To be called when json command data is received from the server.
+To be called when HTML command data is received from the server.
 This can even handle HTML Data. And will try to substitute the html in place.
 */
 function pupulateDataFromServer(responseText){
@@ -34,6 +40,29 @@ function pupulateDataFromServer(responseText){
 	cmdDetails.innerHTML = innerView;
 }
 
+/**
+ * The method does the following:
+ *  1. Receive the command description and command detail from server for selected command.
+ *  2. Prepare HTML elements to represent the command details and parameters required by command.
+ * @param responseText - The command detail in JSON format received from server.
+ */
+function prepareCommandDetailFromJson(responseText){
+	var cmdData = JSON.parse(responseText);
+	alert("Command name is : " + cmdData.commandName);
+	var cmdDetailDiv = document.getElementById("cmdDetailJSON");
+	createAndAddElement(cmdDetailDiv, "Command Name is : ", cmdData.commandName);
+	
+}
+
+function createAndAddElement(parent, label, val){
+	var para = document.createElement("p");
+	var label = document.createTextNode(label);
+	var val = document.createTextNode(val);
+	para.appendChild(label);
+	para.appendChild(val);
+	parent.appendChild(para);
+}
+
 function executeCommand(){
 	var cmdString = prepareCommandString();
 	url = "/cpweb/executeCommand/" + cmdString;
@@ -41,8 +70,11 @@ function executeCommand(){
 }
 
 function refreshCmdList(){
+	var url="/cpweb/initCPSystem";
+	httpGetAsync(url, populateCommandDropDown, "GET");
 	var url="/cpweb/commandList";
-	httpGetAsync(url, populateCommandDropDown, "GET")	
+	httpGetAsync(url, populateCommandDropDown, "GET");
+	
 }
 
 function populateCommandDropDown(responseText){

@@ -26,9 +26,14 @@ public class CPController{
         CPWebUtil.initializeCPSystem();
         return "main";
     }
+
+    @RequestMapping(value={"/initCPSystem"}, method = RequestMethod.GET)
+    public String initCommandProcessingSystem(ModelMap modelMap){
+        CPWebUtil.initializeCPSystem();
+        return null;
+    }
     
-    
-@RequestMapping(value = {"/commandList"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/commandList"}, method = RequestMethod.GET)
     public @ResponseBody String getCommands(ModelMap modelMap){
 		log.info("Request for command list received.");
     	Gson gson = new Gson();
@@ -37,16 +42,22 @@ public class CPController{
     	return jsonString;
     }
     
-    @RequestMapping(value={"/cmdDetailsJSON/{commandName}"}, method=RequestMethod.GET)
+    @RequestMapping(value={"/cmdDetailsJSON/{commandName:.+}"}, method=RequestMethod.GET)
     public @ResponseBody String getCommandMetaDataJOSN(@PathVariable(value="commandName") String commandName, 
     		ModelMap modelMap){
+    	log.info("Request for command detail in json format received.");
     	Gson gson = new Gson();
-    	return gson.toJson(CPWebUtil.getCommandMetadata(commandName));
+    	String jsonData = gson.toJson(CPWebUtil.getCommandMetadata(commandName));
+    	log.info("Returning JSON data : " + jsonData);
+    	return jsonData;
     }
     
     @RequestMapping(value={"/cmdDetailsHTML/{commandName:.+}"}, method=RequestMethod.GET)
     public @ResponseBody String getCommandMetadataHTML(@PathVariable(value="commandName") String commandName){
-    	return CPWebUtil.prepareHTMLForCommandMetadata(commandName);
+    	log.info("Request for command detail in HTML format received.");
+    	String htmlData = CPWebUtil.prepareHTMLForCommandMetadata(commandName);
+    	log.info("The html data for command name : " + commandName + " is : \n" + htmlData);
+    	return htmlData;
     }
     
     @RequestMapping(value={"/executeCommand/{commandString:.+}"}, method=RequestMethod.GET)

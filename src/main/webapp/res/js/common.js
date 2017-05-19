@@ -146,8 +146,12 @@ function addLogToConsole(responseText){
 	consoleLine.appendChild(cmdPromptSpan);
 	consoleLine.appendChild(cmdText);
 	
-	document.getElementById("console").appendChild(consoleLine);
-	document.getElementById("console").style.display = "block";
+	var console = document.getElementById("console"); 
+	
+	console.appendChild(consoleLine);
+	console.style.display = "block";
+	console.scrollTop = console.scrollHeight;
+	
 }
 
 		

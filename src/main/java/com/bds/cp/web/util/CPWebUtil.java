@@ -1,6 +1,7 @@
 package com.bds.cp.web.util;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -104,15 +105,18 @@ public class CPWebUtil {
 	
 	public static String executeWebCommand(String cmdString){
 		String completeCmdName = cmdString.split(" ")[0];
+		Map<String, String> response = new LinkedHashMap<String, String>();
+		Gson gson = new Gson();
 		String shortCmdName = completeCmdName.substring(CPUtil.getIndexOfCharFromRight(completeCmdName, '.')+1, completeCmdName.length());
 		String cmdContext = "SetContext " + cmdString.substring(0, CPUtil.getIndexOfCharFromRight(completeCmdName, '.'));
 		String newCmdStr = cmdString.substring(cmdString.indexOf(shortCmdName), cmdString.length());
 		log.info("The command context is : " + cmdContext);
     	CPUtil.executeCommand(cmdContext);
     	log.info("Done setting command context, starting command execution now.");
-    	String response = shortCmdName + "> " + CPUtil.executeCommand(newCmdStr); 
+    	response.put("cmdName", shortCmdName);
+    	response.put("text", CPUtil.executeCommand(newCmdStr));
     	log.info("Successfully completed the command execution.");
-		return response;
+		return gson.toJson(response);
 	}
 
 }

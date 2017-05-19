@@ -9,23 +9,28 @@
 <title>Command Processor - WEB</title>
 </head>
 <body onload="refreshCmdList()">
-	<div>
-		<div style="height:30px;"></div>
-		Select a command below to be executed:
-		<div style="height:10px;"></div>
-		<div>
-			<select name="cmdList" id="cmdList" onChange="loadCommandDetails()">
-			</select>
-			<button type="button" name="refreshCmdList" id="refreshCmdList" onClick="refreshCmdList()">Refresh</button>
+	<div class="pageContainer">
+		<div id="cmdHeader" class="pageHeader">
+			<span>Command Processor </span><span class="pageHeaderText">- The web based command Processing System.</span>
 		</div>
-		<div id="cmdDetails">
+		<div class="cmdContent">
+			<span>Select a command below to be executed:</span>
+			<div style="height:1px;"></div>
+			<div>
+				<select name="cmdList" id="cmdList" onChange="loadCommandDetails()">
+				</select>
+				<button type="button" name="refreshCmdList" id="refreshCmdList" onClick="refreshCmdList()">Refresh</button>
+			</div>
+			<div id="cmdDetails">
+			</div>
+			<div id = "cmdDetailJSON">
+			</div>
+			<div id='hiddenData'>
+				<input type='hidden' id = 'paramNames' name='paramNames' value=''/>	
+			</div>
 		</div>
-		<div id = "cmdDetailJSON">
-		</div>
-		<div id='hiddenData'>
-			<input type='hidden' id = 'paramNames' name='paramNames' value=''/>	
-		</div>
-		<div id="console">
+		<div id="console" class="console">
+			<span id = "colsoneHeading" class="consoleHeading">Console</span>
 		</div>
 	</div>
 </body>

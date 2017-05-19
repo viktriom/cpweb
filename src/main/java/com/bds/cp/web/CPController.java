@@ -62,7 +62,7 @@ public class CPController{
     
     @RequestMapping(value={"/executeCommand/{commandString:.+}"}, method=RequestMethod.GET)
     public @ResponseBody String executeCommand(@PathVariable(value="commandString") String commandString){
-    	log.info("Request to exeucte command " + commandString + "received. Strting the execution process now.");
+    	log.info("Request to exeucte command " + commandString + " received. Strting the execution process now.");
     	return CPWebUtil.executeWebCommand(commandString);
     	
     }

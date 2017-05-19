@@ -1,5 +1,8 @@
 body {
-	background-color: lightblue;
+	background-color: #807e6b;
+	font-family: "Verdana";
+    font-style: normal;
+    font-size: 12px;
 }
 
 h1 {
@@ -7,6 +10,73 @@ h1 {
 	margin-left: 20px;
 }
 
-paramLabel {
-	
+.pageHeader {
+	font-size: 15px;
+	color: white;
+	background-color:black;
+}
+
+.pageHeaderText {
+	font-size: 12px;
+}
+
+
+.pageContainer {
+	background-color: #26805f;
+	width: 50em;
+	position: fixed;
+	top: 10em;
+	left: 10em;
+}
+
+.cmdContent {
+	position: relative;
+	left: 1em;
+	border-style: fixed;
+	border-width: 1px;
+}
+
+.container {
+	border-radius: 25px;
+    background: lightblue;
+    padding: 20px; 
+    width: 500px;
+    height: 20px;
+}
+
+.cmdLabel {
+	font-sytle: italic;
+	fond-size: 13px;
+	color:#1bedff;
+}
+
+.cmdValue {
+	font-style: bold;
+	font-size: 13px;
+}
+
+.console {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #26805f;
+	background-color: #000000;
+	display: none;
+}
+
+.consolePrompt {
+	fond-size: 13px;
+	color:blue;
+}
+
+.consoleText {
+	font-size: 12px;
+	color: red;
+}
+
+.consoleHeading {
+	font-size: 15px;
+	color: white;
+	position: relative;
+	left: 15em;
+	top: 2px;
 }

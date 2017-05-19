@@ -51,18 +51,25 @@ function pupulateDataFromServer(responseText){
  */
 function prepareCommandDetailFromJson(responseText){
 	var cmdData = JSON.parse(responseText);
-	alert("Command name is : " + cmdData.commandName);
+	document.getElementById("cmdDetailJSON").innerHTML = "";
 	var cmdDetailDiv = document.getElementById("cmdDetailJSON");
 	createAndAddElement(cmdDetailDiv, "Command Name is : ", cmdData.commandName);
+	createAndAddElement(cmdDetailDiv, "", cmdData.commandDescription);
 	
 }
 
 function createAndAddElement(parent, label, val){
 	var para = document.createElement("p");
+	var spanLabel = document.createElement("span");
+	var spanVal = document.createElement("span");
 	var label = document.createTextNode(label);
 	var val = document.createTextNode(val);
-	para.appendChild(label);
-	para.appendChild(val);
+	spanLabel.appendChild(label);
+	spanVal.appendChild(val);
+	spanLabel.setAttribute("class", "cmdLabel");
+	spanVal.setAttribute("class","cmdValue");
+	para.appendChild(spanLabel);
+	para.appendChild(spanVal);
 	parent.appendChild(para);
 }
 
@@ -123,9 +130,24 @@ function prepareCommandString(){
  * @param responseText
  */
 function addLogToConsole(responseText){
-	var innerView = document.getElementById("console").innerHTML;
-	innerView = innerView + "<p>$:" + responseText + "</p>";
-	document.getElementById("console").innerHTML = innerView;
+	var consoleLine = document.createElement("p");
+	var cmdPromptSpan = document.createElement("span");
+	var cmdText = document.createElement("span");
+	var response = JSON.parse(responseText);
+	var cmdName = document.createTextNode("$:"+response.cmdName+"> ");
+	var cmdMsg = document.createTextNode(response.text);
+	
+	cmdPromptSpan.setAttribute("class", "consolePrompt");
+	cmdText.setAttribute("class","consoleText");
+	
+	cmdPromptSpan.appendChild(cmdName);
+	cmdText.appendChild(cmdMsg);
+	
+	consoleLine.appendChild(cmdPromptSpan);
+	consoleLine.appendChild(cmdText);
+	
+	document.getElementById("console").appendChild(consoleLine);
+	document.getElementById("console").style.display = "block";
 }
 
 		

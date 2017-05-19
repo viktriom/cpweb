@@ -1,5 +1,7 @@
 package com.bds.cp.web;
 
+import javax.servlet.annotation.MultipartConfig;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,6 +19,7 @@ import com.google.gson.Gson;
 
 @Controller
 @RequestMapping("/")
+@MultipartConfig
 public class CPController{
 	
 	private static Logger log = Logger.getLogger(CPController.class);

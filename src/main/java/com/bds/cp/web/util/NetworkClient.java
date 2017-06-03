@@ -31,7 +31,6 @@ public class NetworkClient {
     public void connect() {
         if(null == serverIPAddr){
             log.info("The server address provided is incomplete : serverIpAddr = " + serverIPAddr + "and port = " + String.valueOf(port));
-            log.info("The server address provided is incomplete : serverIpAddr = " + serverIPAddr + "and port = " + String.valueOf(port));
             return;
         }
         log.info("Attempting to connect to : " + serverIPAddr + ":" + String.valueOf(port));
@@ -41,7 +40,6 @@ public class NetworkClient {
             OutputStream oStr = client.getOutputStream();
             out = new DataOutputStream(oStr);
         } catch (IOException e) {
-            log.error("There was an error while connecting to the server : " + serverIPAddr + ":" + String.valueOf(port));
             log.error("There was an error while connecting to the server : " + serverIPAddr + ":" + String.valueOf(port));
             client = null;
             out = null;
@@ -53,7 +51,6 @@ public class NetworkClient {
     public String getResponseFromServer(){
         if(client == null){
             log.info("Cannot get response from the server, Client Socket not connected.");
-            log.info("Cannot get response from the server, Client Socket not connected.");
             return null;
         }
         String message = null;
@@ -63,9 +60,7 @@ public class NetworkClient {
             message = in.readUTF();
             System.out.println("Message Received from server : " + message);
             log.info("Message Received from server : " + message);
-            log.info("Message Received from server : " + message);
         } catch (IOException e) {
-            log.info("Exception encountered while reading data from the server : " + serverIPAddr + ":" + String.valueOf(port));
             log.info("Exception encountered while reading data from the server : " + serverIPAddr + ":" + String.valueOf(port));
             e.printStackTrace();
         }
@@ -74,13 +69,11 @@ public class NetworkClient {
     public void sendMessageToServer(String message) {
         if( null == out){
             log.info("Unable to send message to the server, Client Socket not connected.");
-            log.info("Unable to send message to the server, Client Socket not connected.");
             return;
         }
         try {
             out.writeUTF(message);
         } catch (IOException e) {
-            log.info("Exception encountered while sending message to the server : " + serverIPAddr + ":" + String.valueOf(port));
             log.info("Exception encountered while sending message to the server : " + serverIPAddr + ":" + String.valueOf(port));
             e.printStackTrace();
         }
@@ -95,7 +88,6 @@ public class NetworkClient {
             try {
                 client.close();
             } catch (IOException e) {
-                log.info("Exception encountered while closing the connection to the server : " + serverIPAddr + ":" + String.valueOf(port));
                 log.info("Exception encountered while closing the connection to the server : " + serverIPAddr + ":" + String.valueOf(port));
                 e.printStackTrace();
             }

@@ -55,6 +55,7 @@ function prepareCommandDetailFromJson(responseText){
 	var cmdDetailDiv = document.getElementById("cmdDetailJSON");
 	createAndAddElement(cmdDetailDiv, "Command Name is : ", cmdData.commandName);
 	createAndAddElement(cmdDetailDiv, "", cmdData.commandDescription);
+	alert("cmdData:"+cmdData);
 	
 }
 
@@ -96,7 +97,7 @@ function refreshCmdList(){
  */
 function populateCommandDropDown(responseText){
 	document.getElementById("cmdList").options.length = 0;
-	var commands = JSON.parse(responseText);
+	var commands = JSON.parse(JSON.parse(responseText).text);
 	var cmdDropDown = document.getElementById("cmdList");
 	for(var i = 0; i < commands.length; i++){
 		var newOption = document.createElement('option');

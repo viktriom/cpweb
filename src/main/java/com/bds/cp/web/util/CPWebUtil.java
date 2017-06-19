@@ -16,6 +16,9 @@ import com.bds.cp.core.util.CPStartupUtil;
 import com.bds.cp.core.util.CPStore;
 import com.bds.cp.core.util.CPUtil;
 import com.bds.cp.executors.Executor;
+import com.bds.cp.web.AppConstants;
+import com.bds.cp.web.OperatingMode;
+import com.bds.cp.web.commandexecutor.CommandExecutorFactory;
 import com.google.gson.Gson;
 
 public class CPWebUtil {
@@ -23,8 +26,19 @@ public class CPWebUtil {
 	private static Logger log = Logger.getLogger(CPWebUtil.class);
 	
     public static void initializeCPSystem(){
-    	CPStartupUtil.loadCommands();
+    	log.info("Initializing properties.");
         CPUtil.loadPropertiesFileIntoClass(CPUtil.getPathForString("cp.properties"), "CPConstants",true);
+        log.info("Loading web application properties.");
+        CPUtil.loadPropertiesFileIntoClass(CPUtil.getPathForString("cpweb.properties"), "com.bds.cp.web.AppConstants", true);
+        log.info("Web application properties loaded, continuing initilization.");
+        if(AppConstants.getOperatingMode().equals(OperatingMode.NATIVE)){
+        	log.info("OperatingMode is : " + AppConstants.getOperatingMode().name() + ", Loading commands natively.");
+        	CPStartupUtil.loadCommands();
+        }else if(AppConstants.getOperatingMode().equals(OperatingMode.NETWORK)){
+        	log.info("OperatingMode is : " + AppConstants.getOperatingMode().name() + ", Initializing the network connectivity.");
+        	NetworkUtil.getNetworkClient().connectToServer();
+        	log.info("Successfully connected to the network server.");
+        }
     }
 
     public static CommandMetaData getCommandMetadata(String commandName){
@@ -38,7 +52,7 @@ public class CPWebUtil {
         	
         	commandMetaData = new CommandMetaData();
             
-        	ExecutableCommand executableCommand = (ExecutableCommand)executor.getClass().getAnnotation(ExecutableCommand.class);
+        	ExecutableCommand executableCommand = executor.getClass().getAnnotation(ExecutableCommand.class);
             
             commandDescription = executableCommand.commandDescription();
             
@@ -61,9 +75,13 @@ public class CPWebUtil {
 
     public static String prepareHTMLForCommandMetadata(String commandName){
     	Gson gson = new Gson();
-    	CommandMetaData cmdDetail = getCommandMetadata(commandName);
+    	String cmdString = "CmdDetail -cn " + commandName;
+    	String jsonCmdDetail = CommandExecutorFactory.getCommandExecutor(AppConstants.getOperatingMode()).executeCommandBare(cmdString);
+    	
+    	CommandMetaData cmdDetail = gson.fromJson(jsonCmdDetail, CommandMetaData.class);
+    	
     	Map<String, String> dataMap = new HashMap<String,String>();
-    	if(!CPUtil.isCommandAvailable(commandName)) return "<div><p> "+ commandName + " command not found.</p></div>";
+    	if(null == jsonCmdDetail) return "<div><p> "+ commandName + " command not found.</p></div>";
     	StringBuilder sb = new StringBuilder();
     	sb.append("<div>");
     	sb.append("<p>");
@@ -95,28 +113,10 @@ public class CPWebUtil {
     	return gson.toJson(dataMap);
     }
     
-    public static Set<String> getCommandList(){
-    	Set<String> cmds = new LinkedHashSet<String>();
-    	for(String cmd : CPStore.getAvailableCommands()){
-    		cmds.add(cmd);
-    	}
-        return cmds;
+    public static String getCommandList(){
+    	String cmdList = CommandExecutorFactory.getCommandExecutor(AppConstants.getOperatingMode()).executeCommand("com.bds.cp.executors.CmdList");
+    	log.info("Command List is : " + cmdList);
+    	return cmdList;
     }
-	
-	public static String executeWebCommand(String cmdString){
-		String completeCmdName = cmdString.split(" ")[0];
-		Map<String, String> response = new LinkedHashMap<String, String>();
-		Gson gson = new Gson();
-		String shortCmdName = completeCmdName.substring(CPUtil.getIndexOfCharFromRight(completeCmdName, '.')+1, completeCmdName.length());
-		String cmdContext = "SetContext " + cmdString.substring(0, CPUtil.getIndexOfCharFromRight(completeCmdName, '.'));
-		String newCmdStr = cmdString.substring(cmdString.indexOf(shortCmdName), cmdString.length());
-		log.info("The command context is : " + cmdContext);
-    	CPUtil.executeCommand(cmdContext);
-    	log.info("Done setting command context, starting command execution now.");
-    	response.put("cmdName", shortCmdName);
-    	response.put("text", CPUtil.executeCommand(newCmdStr));
-    	log.info("Successfully completed the command execution.");
-		return gson.toJson(response);
-	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bds.cp.web.commandexecutor.CommandExecutorFactory;
 import com.bds.cp.web.util.CPWebUtil;
 import com.google.gson.Gson;
 
@@ -38,9 +39,8 @@ public class CPController{
     
     @RequestMapping(value = {"/commandList"}, method = RequestMethod.GET)
     public @ResponseBody String getCommands(ModelMap modelMap){
-		log.info("Request for command list received.");
-    	Gson gson = new Gson();
-    	String jsonString = gson.toJson(CPWebUtil.getCommandList());
+		log.info("Request for command list received.");   	
+		String jsonString = CPWebUtil.getCommandList();
     	log.info("The command list send is : " + jsonString);
     	return jsonString;
     }
@@ -66,7 +66,7 @@ public class CPController{
     @RequestMapping(value={"/executeCommand/{commandString:.+}"}, method=RequestMethod.GET)
     public @ResponseBody String executeCommand(@PathVariable(value="commandString") String commandString){
     	log.info("Request to exeucte command " + commandString + " received. Strting the execution process now.");
-    	return CPWebUtil.executeWebCommand(commandString);
+    	return CommandExecutorFactory.getCommandExecutor(AppConstants.getOperatingMode()).executeCommand(commandString);
     	
     }
 }

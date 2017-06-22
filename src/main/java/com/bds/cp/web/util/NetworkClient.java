@@ -1,11 +1,9 @@
 package com.bds.cp.web.util;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 
@@ -61,11 +59,7 @@ public class NetworkClient {
 		try {
 			InputStream inStr = client.getInputStream();
 			in = new DataInputStream(inStr);
-			/*InputStreamReader isr = new InputStreamReader(inStr);
-			BufferedReader br = new BufferedReader(isr);
-			message = br.readLine();*/
 			message = in.readUTF();
-			System.out.println(message);
 			log.info("Message Received from server : " + message);
 			return message;
 		} catch (IOException e) {

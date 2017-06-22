@@ -1,6 +1,5 @@
 package com.bds.cp.web;
 
-import javax.servlet.annotation.MultipartConfig;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bds.cp.web.commandexecutor.CommandExecutorFactory;
 import com.bds.cp.web.util.CPWebUtil;
-import com.google.gson.Gson;
 
 /**
  * Created by Vivek Tripathi on 17/02/17.
@@ -20,13 +18,13 @@ import com.google.gson.Gson;
 
 @Controller
 @RequestMapping("/")
-@MultipartConfig
 public class CPController{
 	
 	private static Logger log = Logger.getLogger(CPController.class);
 	
     @RequestMapping(value={"/index"}, method = RequestMethod.GET)
     public String indexClass(ModelMap modelMap){
+    	log.info("Request received to initialize Command Processing system, procceeding with initialization.");
         CPWebUtil.initializeCPSystem();
         return "main";
     }
@@ -49,8 +47,7 @@ public class CPController{
     public @ResponseBody String getCommandMetaDataJOSN(@PathVariable(value="commandName") String commandName, 
     		ModelMap modelMap){
     	log.info("Request for command detail in json format received.");
-    	Gson gson = new Gson();
-    	String jsonData = gson.toJson(CPWebUtil.getCommandMetadata(commandName));
+    	String jsonData = CPWebUtil.getCommandMetadata(commandName);
     	log.info("Returning JSON data : " + jsonData);
     	return jsonData;
     }
@@ -66,7 +63,9 @@ public class CPController{
     @RequestMapping(value={"/executeCommand/{commandString:.+}"}, method=RequestMethod.GET)
     public @ResponseBody String executeCommand(@PathVariable(value="commandString") String commandString){
     	log.info("Request to exeucte command " + commandString + " received. Strting the execution process now.");
-    	return CommandExecutorFactory.getCommandExecutor(AppConstants.getOperatingMode()).executeCommand(commandString);
+    	String respString = CommandExecutorFactory.getCommandExecutor(AppConstants.getOperatingMode()).executeCommand(commandString);
+    	log.info("Response Received is : " + respString);
+    	return respString;
     	
     }
 }

@@ -90,11 +90,11 @@
 		    <version>v1.0</version>
 		</dependency>
 		
-		<!--<dependency>
+		<dependency>
 		    <groupId>com.github.viktriom</groupId>
 		    <artifactId>cp</artifactId>
 		    <version>master-SNAPSHOT</version>
-		</dependency> -->
+		</dependency>
 	
 		<dependency>
 			<groupId>com.github.viktriom</groupId>

@@ -24,8 +24,8 @@ function loadCommandDetails(){
 	value = dropDown.value;
 	url = "/cpweb/cmdDetailsHTML/" + value;
 	httpGetAsync(url, pupulateDataFromServer, "GET");
-	url = "/cpweb/cmdDetailsJSON/" + value;
-	httpGetAsync(url, prepareCommandDetailFromJson, "GET");
+	//url = "/cpweb/cmdDetailsJSON/" + value;
+	//httpGetAsync(url, prepareCommandDetailFromJson, "GET");
 }
 
 /**

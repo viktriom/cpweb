@@ -41,41 +41,18 @@ public class CPWebUtil {
         }
     }
 
-    public static CommandMetaData getCommandMetadata(String commandName){
+    public static String getCommandMetadata(String commandName){
         log.info("Preparing Command metadata for command : ." + commandName);
-        CommandMetaData commandMetaData = null;
-        String commandDescription = "";
-        String[] paramNames, paramNameDescription, paramType;
-        Executor executor = CPStore.getCommandFromCommandStore(commandName);
-        
-        if(null != executor && executor.getClass().isAnnotationPresent(ExecutableCommand.class)){
-        	
-        	commandMetaData = new CommandMetaData();
-            
-        	ExecutableCommand executableCommand = executor.getClass().getAnnotation(ExecutableCommand.class);
-            
-            commandDescription = executableCommand.commandDescription();
-            
-            commandMetaData.setCommandName(commandName);
-            commandMetaData.setCommandDescription(commandDescription);
-            
-            paramNames = executableCommand.commandParams();
-            paramNameDescription = executableCommand.commandParamsDescription();
-            paramType = executableCommand.commandParameterType();
-            
-            for(int i = 0;i <paramNames.length;i++){
-            	if(paramNames[i].isEmpty() || paramNames[i].length() <= 0) continue;
-            	CommandParameter cp = new com.bds.cp.bean.CommandParameter(paramNames[i], paramNameDescription[i], CommandParameterType.getCommandParameterType(paramType[i]));
-            	commandMetaData.addParamNameAndDescription(paramNames[i], cp);
-            }
-        }
+        Gson gson = new Gson();
+    	String cmdString = "CmdDetail -c " + commandName;
+    	String jsonCmdDetail = CommandExecutorFactory.getCommandExecutor(AppConstants.getOperatingMode()).executeCommandBare(cmdString);
         log.info("Done collecting parameter metadata for command name : " + commandName);
-        return commandMetaData;
+        return jsonCmdDetail;
     }
 
     public static String prepareHTMLForCommandMetadata(String commandName){
     	Gson gson = new Gson();
-    	String cmdString = "CmdDetail -cn " + commandName;
+    	String cmdString = "CmdDetail -c " + commandName;
     	String jsonCmdDetail = CommandExecutorFactory.getCommandExecutor(AppConstants.getOperatingMode()).executeCommandBare(cmdString);
     	
     	CommandMetaData cmdDetail = gson.fromJson(jsonCmdDetail, CommandMetaData.class);
